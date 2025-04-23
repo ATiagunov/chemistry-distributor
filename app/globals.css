@@ -1,0 +1,227 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.circle-menu {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  border-radius: 50%;
+  background-color: transparent;
+  overflow: hidden;
+  border: 2px solid var(orc-light);
+}
+
+.button {
+  position: absolute;
+  width: 50%;
+  height: 85%;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0% 0%;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%);
+  background-color: white;
+  transition: transform 0.2s, background-color 0.2s;
+  cursor: pointer;
+}
+
+.button span {
+  display: block;
+  text-align: center;
+  padding: 25%;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  width: 100%;
+}
+
+.flower {
+  border-radius: 50%;
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid var(orc-light);
+  background-color: white;
+}
+
+.center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(0.875rem, 4vw, 1.125rem);
+  font-weight: bold;
+  color: #03381d00;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: var(--orc-bg);
+  transform: scale(1.05) rotate(var(--angle));
+}
+
+.button:hover ~ .center-label {
+  color: rgb(255, 230, 0);
+  font-size: clamp(1rem, 5vw, 1.5rem);
+    z-index: 2;
+}
+
+.hovered {
+  transition: transform 0.3s ease;
+}
+
+.button:hover ~ svg .hovered {
+  transform: translate(100px, 100px) scale(1.1);
+  background-color: white;
+}
+
+@media (max-width: 640px) {
+  .button span {
+    padding: 10% 0 0 0;
+  }
+}
+
+.category-selector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.category-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #f5f5f5;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.category-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #0d8a3f;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.category-item:hover::before,
+.category-item.active::before {
+  transform: scaleX(1);
+}
+
+.category-item:hover,
+.category-item.active {
+  background-color: #e8f5ee;
+}
+
+.category-icon {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.category-name {
+  font-weight: 500;
+  text-align: center;
+}
+
+.category-item.active .category-name {
+  color: #0d8a3f;
+  font-weight: 600;
+}
