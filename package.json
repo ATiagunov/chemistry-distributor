@@ -1,14 +1,11 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "orc",
+  "version": "1.0.0",
   "private": true,
-  "homepage": "https://github.com/ATiagunov/chemistry-distributor",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "lint": "next lint"
   },
   "dependencies": {
@@ -70,5 +67,20 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
-  }
+  },
+  "description": "Chemicals Distribution",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ATiagunov/chemistry-distributor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ATiagunov/chemistry-distributor/issues"
+  },
+  "homepage": "https://github.com/ATiagunov/chemistry-distributor#readme"
 }

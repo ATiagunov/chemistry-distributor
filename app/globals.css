@@ -106,6 +106,15 @@
   font-size: clamp(1rem, 3vw, 1.25rem);
   width: 100%;
 }
+/* 
+@media (max-width: 640px) {
+  .button span {
+    display: inline;
+    width: 200px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+} */
 
 .flower {
   border-radius: 50%;
@@ -127,7 +136,7 @@
   transform: translate(-50%, -50%);
   font-size: clamp(0.875rem, 4vw, 1.125rem);
   font-weight: bold;
-  color: #03381d00;
+  color: white;
   pointer-events: none;
   transition: all 0.3s ease;
 }
@@ -138,24 +147,19 @@
 }
 
 .button:hover ~ .center-label {
-  color: rgb(255, 230, 0);
+  /* color: rgb(255, 230, 0); */
   font-size: clamp(1rem, 5vw, 1.5rem);
-    z-index: 2;
+  z-index: 2;
+  text-shadow: 0 0 5px rgb(255, 230, 0);
 }
 
 .hovered {
-  transition: transform 0.3s ease;
+  transition: transform 0.7s ease;
 }
 
 .button:hover ~ svg .hovered {
   transform: translate(100px, 100px) scale(1.1);
   background-color: white;
-}
-
-@media (max-width: 640px) {
-  .button span {
-    padding: 10% 0 0 0;
-  }
 }
 
 .category-selector {

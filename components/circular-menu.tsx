@@ -81,7 +81,23 @@ export function CircularMenu({ categories = [], onCategorySelect }: CircularMenu
             }
             onClick={() => handleCategoryClick(category)}
           >
-            <span style={{ transform: `rotate(${-index * 60}deg)` }}>{category}</span>
+          <span
+            className="
+              block text-center 
+              px-2 sm:p-[40%] 
+              text-[clamp(0.75rem,2vw,1.25rem)] 
+              w-[80px] sm:w-[100px] 
+              mx-auto 
+              whitespace-normal 
+              leading-tight
+              sm:text-base
+            "
+            style={{
+              transform: `rotate(${-index * 60}deg)`,
+            }}
+          >
+            {category}
+          </span>
           </div>
         ))}
 
