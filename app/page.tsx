@@ -1,12 +1,15 @@
+"use client"
+
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CircularMenu } from "@/components/circular-menu"
 import { BadgeCheck, Truck, ChevronRight, Mail, Phone, MapPin } from "lucide-react"
 
+const productCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Ethanolamines", "Surfactants"]
+
 export default function Home() {
-  // English translations of the product categories
-  const productCategories = ["Ethanolamines", "Surfactants", "Acids", "Alkalis", "Glycols", "Polymers"]
 
   return (
     <main className="flex-1">
@@ -25,11 +28,46 @@ export default function Home() {
             </div>
           </div>
 
+          <div className="grid gap-12 lg:grid-cols-2 items-center">
+            {/* Circular Menu - Left side on desktop, top on mobile */}
             <div className="flex justify-center order-2 lg:order-1">
               <div className="w-full max-w-[500px]">
-                <CircularMenu categories={productCategories} />
+                <CircularMenu
+                  categories={productCategories}
+                  initialCategory="Glycols"
+                  onCategoryClick={(category) => {
+                    // Navigate to products page with selected category
+                    window.location.href = `/products?category=${category}#products-section`
+                  }}
+                />
               </div>
             </div>
+
+            {/* Content - Right side on desktop, bottom on mobile */}
+            <div className="flex flex-col space-y-6 order-1 lg:order-2">
+              <div className="space-y-4">
+                <div className="inline-block rounded-lg bg-orc-bg px-3 py-1 text-sm text-orc-dark">
+                  Explore Our Categories
+                </div>
+                <h2 className="text-2xl font-bold tracking-tighter md:text-3xl">Comprehensive Chemical Solutions</h2>
+                <p className="text-muted-foreground">
+                  We offer a wide range of high-quality chemicals and laboratory supplies for various industries and
+                  research applications. Use our interactive selector to explore our product categories.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Link href="/products">
+                  <Button size="lg" className="bg-orc-medium hover:bg-orc-dark">
+                    Browse Products
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Button variant="outline" size="lg" className="border-orc-medium text-orc-medium hover:bg-orc-bg">
+                  Request Quote
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -38,6 +76,7 @@ export default function Home() {
         <div className="container px-4 md:px-6">
           <div className="grid gap-10 px-10 md:gap-16 lg:grid-cols-2">
             <div className="space-y-4">
+              <div className="inline-block rounded-lg bg-orc-bg px-3 py-1 text-sm text-orc-dark">Our Services</div>
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">More Than Just a Supplier</h2>
               <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed">
                 We provide comprehensive solutions to support your operations, from technical consultation to logistics
@@ -80,7 +119,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-orc-bg">
+  <section className="w-full py-12 md:py-24 lg:py-32 bg-orc-bg">
         <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6 lg:gap-10">
           <div className="space-y-3">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Trusted By Industry Leaders</h2>
@@ -128,6 +167,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Contact Section */}
       <section id="contact" className="w-full py-12 md:py-24 lg:py-32 bg-white">
         <div className="container grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-10">
           <div className="space-y-2">

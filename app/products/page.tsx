@@ -1,12 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import { PageHeader } from "@/components/page-header"
+import { motion, AnimatePresence } from "framer-motion"
 import { CircularMenu } from "@/components/circular-menu"
-import { CategorySelector } from "@/components/category-selector"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { ChevronDown, ArrowUp } from "lucide-react"
+import { CategorySelector } from "@/components/category-selector"
+import { RequestQuoteModal } from "@/components/request-quote-modal"
+
+const productCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Ethanolamines", "Surfactants"]
 
 // Sample product data
 const products = [
@@ -15,151 +18,417 @@ const products = [
     name: "Monoethanolamine (MEA)",
     category: "Ethanolamines",
     description: "High purity monoethanolamine for gas treatment, detergents, and personal care products.",
-    image: "/placeholder.svg?height=300&width=300",
+    image: "/placeholder.svg?height=300&width=533", // Changed to 16:9 ratio
     price: "$45.00 - $1,200.00",
   },
   {
     id: 2,
-    name: "Sodium Lauryl Sulfate",
-    category: "Surfactants",
-    description: "Effective anionic surfactant used in cleaning and hygiene products.",
-    image: "/placeholder.svg?height=300&width=300",
-    price: "$32.00 - $950.00",
-  },
-  {
-    id: 3,
-    name: "Sulfuric Acid",
-    category: "Acids",
-    description: "Industrial grade sulfuric acid for various chemical processes and manufacturing.",
-    image: "/placeholder.svg?height=300&width=300",
-    price: "$28.00 - $850.00",
-  },
-  {
-    id: 4,
-    name: "Sodium Hydroxide",
-    category: "Alkalis",
-    description: "Pure sodium hydroxide pellets for industrial applications and chemical synthesis.",
-    image: "/placeholder.svg?height=300&width=300",
-    price: "$35.00 - $780.00",
-  },
-  {
-    id: 5,
-    name: "Propylene Glycol",
-    category: "Glycols",
-    description: "USP grade propylene glycol for pharmaceutical, food, and cosmetic applications.",
-    image: "/placeholder.svg?height=300&width=300",
-    price: "$42.00 - $1,100.00",
-  },
-  {
-    id: 6,
-    name: "Polyvinyl Alcohol",
-    category: "Polymers",
-    description: "Water-soluble synthetic polymer for adhesives, paper coating, and textile applications.",
-    image: "/placeholder.svg?height=300&width=300",
-    price: "$55.00 - $1,500.00",
-  },
-  {
-    id: 7,
     name: "Diethanolamine (DEA)",
     category: "Ethanolamines",
     description: "High quality diethanolamine for gas purification and as a surfactant intermediate.",
-    image: "/placeholder.svg?height=300&width=300",
+    image: "/placeholder.svg?height=300&width=533",
     price: "$48.00 - $1,300.00",
   },
   {
-    id: 8,
+    id: 3,
+    name: "Triethanolamine (TEA)",
+    category: "Ethanolamines",
+    description: "Pure triethanolamine used in cement production, cosmetics, and as a corrosion inhibitor.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$52.00 - $1,400.00",
+  },
+  {
+    id: 4,
+    name: "Sodium Lauryl Sulfate",
+    category: "Surfactants",
+    description: "Effective anionic surfactant used in cleaning and hygiene products.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$32.00 - $950.00",
+  },
+  {
+    id: 5,
     name: "Sodium Laureth Sulfate",
     category: "Surfactants",
     description: "Mild anionic surfactant for personal care and household cleaning products.",
-    image: "/placeholder.svg?height=300&width=300",
+    image: "/placeholder.svg?height=300&width=533",
     price: "$36.00 - $980.00",
+  },
+  {
+    id: 6,
+    name: "Cocamidopropyl Betaine",
+    category: "Surfactants",
+    description: "Amphoteric surfactant used in personal care products for its mildness and foam enhancement.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$40.00 - $1,050.00",
+  },
+  {
+    id: 7,
+    name: "Sulfuric Acid",
+    category: "Acids",
+    description: "Industrial grade sulfuric acid for various chemical processes and manufacturing.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$28.00 - $850.00",
+  },
+  {
+    id: 8,
+    name: "Hydrochloric Acid",
+    category: "Acids",
+    description: "High purity hydrochloric acid for laboratory and industrial applications.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$25.00 - $780.00",
+  },
+  {
+    id: 9,
+    name: "Nitric Acid",
+    category: "Acids",
+    description: "Concentrated nitric acid for metal processing, fertilizer production, and laboratory use.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$30.00 - $900.00",
+  },
+  {
+    id: 10,
+    name: "Sodium Hydroxide",
+    category: "Alkalis",
+    description: "Pure sodium hydroxide pellets for industrial applications and chemical synthesis.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$35.00 - $780.00",
+  },
+  {
+    id: 11,
+    name: "Potassium Hydroxide",
+    category: "Alkalis",
+    description: "High quality potassium hydroxide for soap making, biodiesel production, and chemical processes.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$38.00 - $820.00",
+  },
+  {
+    id: 12,
+    name: "Calcium Hydroxide",
+    category: "Alkalis",
+    description: "Fine calcium hydroxide powder for water treatment, construction, and food processing.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$32.00 - $750.00",
+  },
+  {
+    id: 13,
+    name: "Propylene Glycol",
+    category: "Glycols",
+    description: "USP grade propylene glycol for pharmaceutical, food, and cosmetic applications.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$42.00 - $1,100.00",
+  },
+  {
+    id: 14,
+    name: "Ethylene Glycol",
+    category: "Glycols",
+    description: "Industrial grade ethylene glycol for antifreeze, polyester resins, and heat transfer applications.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$38.00 - $980.00",
+  },
+  {
+    id: 15,
+    name: "Diethylene Glycol",
+    category: "Glycols",
+    description: "High purity diethylene glycol for solvent applications, gas drying, and plasticizers.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$45.00 - $1,200.00",
+  },
+  {
+    id: 16,
+    name: "Polyvinyl Alcohol",
+    category: "Polymers",
+    description: "Water-soluble synthetic polymer for adhesives, paper coating, and textile applications.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$55.00 - $1,500.00",
+  },
+  {
+    id: 17,
+    name: "Polyethylene Glycol",
+    category: "Polymers",
+    description: "Versatile polymer used in pharmaceuticals, cosmetics, and industrial applications.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$50.00 - $1,350.00",
+  },
+  {
+    id: 18,
+    name: "Polyacrylamide",
+    category: "Polymers",
+    description: "High molecular weight polymer for water treatment, paper making, and enhanced oil recovery.",
+    image: "/placeholder.svg?height=300&width=533",
+    price: "$60.00 - $1,600.00",
   },
 ]
 
-// Product categories
-const productCategories = ["Ethanolamines", "Surfactants", "Acids", "Alkalis", "Glycols", "Polymers"]
+// Product categories with descriptions
+const categoryDescriptions = {
+  Ethanolamines:
+    "Versatile compounds used in a wide range of applications including gas treatment, detergents, personal care products, and as chemical intermediates. Our high-purity ethanolamines meet the most demanding industry specifications.",
+  Surfactants:
+    "Surface-active agents that reduce surface tension between liquids, solids, and gases. Our surfactants portfolio includes anionic, cationic, non-ionic, and amphoteric varieties for cleaning products, personal care, and industrial processes.",
+  Acids:
+    "Essential chemicals for numerous industrial processes. We offer a comprehensive range of high-quality inorganic and organic acids in various concentrations for applications in manufacturing, water treatment, and laboratory use.",
+  Alkalis:
+    "Basic compounds crucial for neutralization reactions and many industrial processes. Our alkali products include hydroxides and carbonates of various metals, available in different forms and concentrations.",
+  Glycols:
+    "Important chemical intermediates and solvents with excellent hygroscopic properties. Our glycol products serve industries from automotive to pharmaceuticals, with applications in antifreeze, polyester resins, and personal care.",
+  Polymers:
+    "Large molecules composed of repeating structural units that provide unique physical properties. Our polymer range includes water-soluble varieties, resins, and specialty formulations for diverse industrial applications.",
+}
 
 export default function ProductsPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string>("Glycols") // Default to Glycols
+  const [previousCategory, setPreviousCategory] = useState<string>("Glycols")
   const [showProducts, setShowProducts] = useState(false)
+  const [scrollY, setScrollY] = useState(0)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [transitionDirection, setTransitionDirection] = useState<"up" | "down">("down")
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<string>("")
+  const mainRef = useRef<HTMLDivElement>(null)
+  const productsRef = useRef<HTMLElement>(null)
 
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category)
-    setShowProducts(true)
+  // Determine the direction of transition based on category change
+  const determineTransitionDirection = (prev: string, current: string) => {
+    const prevIndex = productCategories.indexOf(prev)
+    const currentIndex = productCategories.indexOf(current)
+
+    if (prevIndex === currentIndex) return "down"
+
+    // Handle wrap-around cases
+    if (prevIndex === productCategories.length - 1 && currentIndex === 0) {
+      return "down" // Moving clockwise from last to first
+    }
+    if (prevIndex === 0 && currentIndex === productCategories.length - 1) {
+      return "up" // Moving counterclockwise from first to last
+    }
+
+    return currentIndex > prevIndex ? "down" : "up"
   }
 
-  const handleCategorySelectorSelect = (category: string | null) => {
+  const handleCategorySelect = (category: string) => {
+    setPreviousCategory(selectedCategory)
+    const direction = determineTransitionDirection(selectedCategory, category)
+    setTransitionDirection(direction)
     setSelectedCategory(category)
+  }
+
+  const handleCategoryClick = (category: string) => {
+    handleCategorySelect(category)
+    setShowProducts(true)
+    // Scroll to products section with smooth animation
+    if (productsRef.current) {
+      productsRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  const handleViewProducts = () => {
+    setShowProducts(true)
+    // Scroll to products section with smooth animation
+    if (productsRef.current) {
+      productsRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  const handleRequestQuote = (productName: string) => {
+    setSelectedProduct(productName)
+    setModalOpen(true)
   }
 
   // Filter products based on selected category
-  const filteredProducts = selectedCategory
-    ? products.filter((product) => product.category === selectedCategory)
-    : products
+  const filteredProducts = products.filter((product) => product.category === selectedCategory)
+
+  // Handle scroll for parallax effects and scroll-to-top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+
+      // Show scroll-to-top button when scrolled down to products section
+      if (productsRef.current) {
+        const productsPosition = productsRef.current.getBoundingClientRect().top
+        setShowScrollTop(productsPosition < 0)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  // Check for URL parameters on component mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const categoryParam = urlParams.get("category")
+
+    if (categoryParam && productCategories.includes(categoryParam)) {
+      setSelectedCategory(categoryParam)
+
+      // If there's a hash in the URL, scroll to that section
+      if (window.location.hash === "#products-section" && productsRef.current) {
+        setTimeout(() => {
+          productsRef.current?.scrollIntoView({ behavior: "smooth" })
+          setShowProducts(true)
+        }, 500)
+      }
+    }
+  }, [])
 
   return (
-    <main className="flex-1">
-      <PageHeader
-        title="Our Products"
-        description="Browse our comprehensive range of high-quality chemical products for various industrial and research applications."
-      />
-
-      <section className="py-12 md:py-16">
-        <div className="container px-4 md:px-6">
-          {!showProducts ? (
-            <div className="flex flex-col items-center justify-center mb-12">
-              <h2 className="text-2xl font-bold mb-8">Select a Product Category</h2>
-              <CircularMenu categories={productCategories} onCategorySelect={handleCategorySelect} />
+    <main ref={mainRef} className="flex-1 overflow-x-hidden">
+      {/* Hero Section with Circle Menu and Category Description */}
+      <section className="min-h-screen flex flex-col relative">
+        <div className="flex-1 container px-4 md:px-6 py-12 flex flex-col md:flex-row items-center">
+          {/* Left side - Circle Menu */}
+          <motion.div
+            className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 relative md:pr-8"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="w-full max-w-[500px]">
+              <CircularMenu
+                categories={productCategories}
+                onCategorySelect={handleCategorySelect}
+                onCategoryClick={handleCategoryClick}
+                variant="products"
+                initialCategory="Glycols"
+              />
             </div>
-          ) : (
-            <>
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-6">Product Categories</h2>
-                <CategorySelector
-                  categories={productCategories}
-                  activeCategory={selectedCategory}
-                  onSelectCategory={handleCategorySelectorSelect}
-                />
-              </div>
+          </motion.div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden"
-                  >
-                    <div className="relative h-48 w-full">
-                      <Image
-                        src={product.image || "/placeholder.svg"}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <Badge className="mb-2 bg-orc-medium hover:bg-orc-dark">{product.category}</Badge>
-                      <h3 className="text-xl font-bold mb-2">{product.name}</h3>
-                      <p className="text-muted-foreground mb-4">{product.description}</p>
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">{product.price}</span>
-                        <Button size="sm" className="bg-orc-medium hover:bg-orc-dark">
-                          Request Quote
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
+          {/* Decorative Line - without circle */}
+          <div className="hidden md:block absolute left-1/2 top-1/2 transform -translate-y-1/2 h-[60%] w-[2px]">
+            <div className="h-full w-full bg-gradient-to-b from-transparent via-orc-medium to-transparent"></div>
+          </div>
 
-          <div className="flex justify-center mt-12">
-            <Button size="lg" className="bg-orc-medium hover:bg-orc-dark">
-              View Full Catalog
-            </Button>
+          {/* Right side - Category Description - narrower with better margin */}
+          <motion.div
+            className="w-full md:w-1/2 md:pl-8"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedCategory}
+                initial={{ opacity: 0, y: transitionDirection === "down" ? -20 : 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: transitionDirection === "down" ? 20 : -20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-orc-bg rounded-3xl p-8 shadow-md border-2 border-orc-medium mx-auto"
+              >
+                <h2 className="text-3xl font-bold mb-4 text-orc-dark">{selectedCategory}</h2>
+                <p className="text-gray-700 text-xl">
+                  {categoryDescriptions[selectedCategory as keyof typeof categoryDescriptions]}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+        </div>
+
+        {/* View Products Button */}
+        <motion.div
+          className="flex justify-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Button
+            onClick={handleViewProducts}
+            className="group flex flex-col items-center bg-transparent hover:bg-transparent text-orc-medium hover:text-orc-dark"
+          >
+            <span className="mb-2 text-lg font-medium">View Products</span>
+            <ChevronDown className="h-12 w-12 animate-bounce" />
+          </Button>
+        </motion.div>
+      </section>
+
+      {/* Products Section */}
+      <section ref={productsRef} id="products-section" className="min-h-screen bg-gray-50 pt-8 pb-16">
+        {/* Banner with Category Selector */}
+        <div className="sticky top-16 z-10 bg-white shadow-md">
+          <div className="container px-4 md:px-6 py-4">
+            <CategorySelector
+              categories={productCategories}
+              activeCategory={selectedCategory}
+              onSelectCategory={handleCategorySelect}
+            />
           </div>
         </div>
+
+        {/* Products Grid */}
+        <div className="container px-4 md:px-6 mt-8">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, staggerChildren: 0.1 }}
+          >
+            <AnimatePresence mode="wait">
+              {filteredProducts.map((product) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300 product-card"
+                >
+                  <div className="relative h-48 w-full overflow-hidden">
+                    <Image
+                      src={product.image || "/placeholder.svg"}
+                      alt={product.name}
+                      fill
+                      className="object-cover transition-transform duration-300 hover:scale-105 product-image"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+                    <p className="text-muted-foreground mb-4">{product.description}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">{product.price}</span>
+                      <Button
+                        size="sm"
+                        className="bg-orc-medium hover:bg-orc-dark transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        onClick={() => handleRequestQuote(product.name)}
+                      >
+                        Request Quote
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </div>
       </section>
+
+      {/* Scroll to Top Button - Positioned higher */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed bottom-24 left-6 z-50"
+          >
+            <Button
+              onClick={handleScrollToTop}
+              size="icon"
+              className="rounded-full w-12 h-12 bg-orc-medium hover:bg-orc-dark shadow-lg"
+              aria-label="Scroll to top"
+            >
+              <ArrowUp className="h-6 w-6" />
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Request Quote Modal */}
+      <RequestQuoteModal isOpen={modalOpen} onClose={() => setModalOpen(false)} productName={selectedProduct} />
     </main>
   )
 }

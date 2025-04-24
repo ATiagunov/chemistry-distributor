@@ -2,20 +2,30 @@
 
 import type React from "react"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface CircularMenuProps {
   categories?: string[]
   onCategorySelect?: (category: string) => void
+  onCategoryClick?: (category: string) => void
+  variant?: "default" | "products" | "products-hero"
+  initialCategory?: string
 }
 
-export function CircularMenu({ categories = [], onCategorySelect }: CircularMenuProps) {
+export function CircularMenu({
+  categories = [],
+  onCategorySelect,
+  onCategoryClick,
+  variant = "default",
+  initialCategory,
+}: CircularMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
   const flowerRef = useRef<SVGSVGElement>(null)
   const centerLabelRef = useRef<HTMLDivElement>(null)
+  const [activeCategory, setActiveCategory] = useState<string | null>(initialCategory || null)
 
   // Default categories if none provided
-  const defaultCategories = ["Ethanolamines", "Surfactants", "Acids", "Alkalis", "Glycols", "Polymers"]
+  const defaultCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Ethanolamines", "Surfactants"]
 
   const displayCategories = categories.length > 0 ? categories : defaultCategories
 
@@ -23,13 +33,28 @@ export function CircularMenu({ categories = [], onCategorySelect }: CircularMenu
     const menu = menuRef.current
     const flower = flowerRef.current
 
-    if (flower) {
-      flower.style.transform = "translate(-50%, -50%) rotate(-90deg)"
-    }
-
     if (!menu || !flower) return
 
-    const positions = [270, 330, 30, 90, 150, 210]
+    const positions = [30, 90, 150, 210, 270, 330]
+    const categoryPositions: Record<string, number> = {}
+
+    // Map categories to their positions
+    displayCategories.forEach((category, index) => {
+      categoryPositions[category] = positions[index % positions.length]
+    })
+
+    // If initialCategory is provided, rotate the flower to that position
+    if (initialCategory && !activeCategory) {
+      const index = displayCategories.indexOf(initialCategory)
+      if (index !== -1) {
+        const angle = index * 60
+        flower.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`
+        setActiveCategory(initialCategory)
+        if (onCategorySelect) {
+          onCategorySelect(initialCategory)
+        }
+      }
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = menu.getBoundingClientRect()
@@ -45,10 +70,25 @@ export function CircularMenu({ categories = [], onCategorySelect }: CircularMenu
       )
 
       flower.style.transform = `translate(-50%, -50%) rotate(${closest}deg)`
+
+      // Find which category corresponds to the closest position
+      const hoveredCategory =
+        Object.keys(categoryPositions).find((category) => categoryPositions[category] === closest) || null
+
+      if (hoveredCategory !== activeCategory) {
+        setActiveCategory(hoveredCategory)
+        if (hoveredCategory && onCategorySelect) {
+          onCategorySelect(hoveredCategory)
+        }
+      }
     }
 
     const handleMouseLeave = () => {
-      flower.style.transform = "translate(-50%, -50%) rotate(-90deg)"
+      // Don't reset rotation if initialCategory is set
+      if (!initialCategory) {
+        flower.style.transform = "translate(-50%, -50%) rotate(0deg)"
+        setActiveCategory(null)
+      }
     }
 
     menu.addEventListener("mousemove", handleMouseMove)
@@ -58,51 +98,49 @@ export function CircularMenu({ categories = [], onCategorySelect }: CircularMenu
       menu.removeEventListener("mousemove", handleMouseMove)
       menu.removeEventListener("mouseleave", handleMouseLeave)
     }
-  }, [])
+  }, [displayCategories, activeCategory, onCategorySelect, initialCategory])
 
-  const handleCategoryClick = (category: string) => {
-    if (onCategorySelect) {
-      onCategorySelect(category)
+  const handleCategoryClick = (category: string, index: number) => {
+    if (onCategoryClick) {
+      onCategoryClick(category)
     }
+
+    // Rotate the flower to the clicked category position
+    const flower = flowerRef.current
+    if (flower) {
+      const angle = index * 60
+      flower.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`
+    }
+  }
+
+  let menuClass = "circle-menu"
+  if (variant === "products") {
+    menuClass = "circle-menu-products"
+  } else if (variant === "products-hero") {
+    menuClass = "circle-menu-products-hero"
   }
 
   return (
     <div className="relative w-full max-w-[500px] mx-auto">
-      <div ref={menuRef} className="circle-menu w-full aspect-square">
+      <div ref={menuRef} className={`${menuClass} w-full aspect-square`}>
         {displayCategories.map((category, index) => (
           <div
             key={index}
-            className="button"
+            className={`button ${activeCategory === category ? "active" : ""}`}
             style={
               {
                 transform: `rotate(${index * 60}deg)`,
                 "--angle": `${index * 60}deg`,
               } as React.CSSProperties
             }
-            onClick={() => handleCategoryClick(category)}
+            onClick={() => handleCategoryClick(category, index)}
           >
-          <span
-            className="
-              block text-center 
-              px-2 sm:p-[40%] 
-              text-[clamp(0.75rem,2vw,1.25rem)] 
-              w-[80px] sm:w-[100px] 
-              mx-auto 
-              whitespace-normal 
-              leading-tight
-              sm:text-base
-            "
-            style={{
-              transform: `rotate(${-index * 60}deg)`,
-            }}
-          >
-            {category}
-          </span>
+            <span style={{ transform: `rotate(${-index * 60}deg)` }}>{category}</span>
           </div>
         ))}
 
-        <div ref={centerLabelRef} className="center-label">
-          ORC
+        <div ref={centerLabelRef} className={`center-label ${activeCategory ? "active" : ""}`}>
+          {"ORC"}
         </div>
 
         <svg
