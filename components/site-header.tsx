@@ -1,8 +1,14 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { OrcLogo } from "@/components/orc-logo"
+import { RequestQuoteModal } from "@/components/request-quote-modal"
 
 export function SiteHeader() {
+  const [modalOpen, setModalOpen] = useState(false)
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="container flex h-16 items-center justify-between">
@@ -64,14 +70,13 @@ export function SiteHeader() {
           </nav>
         </div>
         <div className="flex items-center space-x-4">
-          <Button variant="outline" size="sm" className="hidden md:flex">
-            Request Quote
-          </Button>
-          <Button size="sm" className="bg-orc-medium hover:bg-orc-dark">
+          <Button size="sm" className="bg-orc-medium hover:bg-orc-dark" onClick={() => setModalOpen(true)}>
             Contact Sales
           </Button>
         </div>
       </div>
+      <RequestQuoteModal isOpen={modalOpen} onClose={() => setModalOpen(false)} productName="General Inquiry" />
+
     </header>
   )
 }

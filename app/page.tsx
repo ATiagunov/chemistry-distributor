@@ -5,9 +5,9 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CircularMenu } from "@/components/circular-menu"
-import { BadgeCheck, Truck, ChevronRight, Mail, Phone, MapPin } from "lucide-react"
+import { BadgeCheck, ChevronRight, Mail, Phone, MapPin } from "lucide-react"
 
-const productCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Ethanolamines", "Surfactants"]
+const productCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Surfactants", "Ethanolamines"]
 
 export default function Home() {
 
@@ -31,7 +31,7 @@ export default function Home() {
           <div className="grid gap-12 lg:grid-cols-2 items-center">
             {/* Circular Menu - Left side on desktop, top on mobile */}
             <div className="flex justify-center order-2 lg:order-1">
-              <div className="w-full max-w-[500px]">
+              <div className="w-full max-w-[500px] hover:text-orc-dark">
                 <CircularMenu
                   categories={productCategories}
                   initialCategory="Glycols"
@@ -46,9 +46,6 @@ export default function Home() {
             {/* Content - Right side on desktop, bottom on mobile */}
             <div className="flex flex-col space-y-6 order-1 lg:order-2">
               <div className="space-y-4">
-                <div className="inline-block rounded-lg bg-orc-bg px-3 py-1 text-sm text-orc-dark">
-                  Explore Our Categories
-                </div>
                 <h2 className="text-2xl font-bold tracking-tighter md:text-3xl">Comprehensive Chemical Solutions</h2>
                 <p className="text-muted-foreground">
                   We offer a wide range of high-quality chemicals and laboratory supplies for various industries and
@@ -56,15 +53,12 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col gap-2 sm:flex-row">
-                <Link href="/products">
+                <Link href="/products#products-section">
                   <Button size="lg" className="bg-orc-medium hover:bg-orc-dark">
                     Browse Products
                     <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <Button variant="outline" size="lg" className="border-orc-medium text-orc-medium hover:bg-orc-bg">
-                  Request Quote
-                </Button>
               </div>
             </div>
           </div>
@@ -76,7 +70,6 @@ export default function Home() {
         <div className="container px-4 md:px-6">
           <div className="grid gap-10 px-10 md:gap-16 lg:grid-cols-2">
             <div className="space-y-4">
-              <div className="inline-block rounded-lg bg-orc-bg px-3 py-1 text-sm text-orc-dark">Our Services</div>
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">More Than Just a Supplier</h2>
               <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed">
                 We provide comprehensive solutions to support your operations, from technical consultation to logistics
@@ -103,8 +96,8 @@ export default function Home() {
                   <BadgeCheck className="h-5 w-5 text-orc-medium" />
                   <span>Quality assurance and analytical testing</span>
                 </li>
-              </ul>
-              <Button className="mt-4 bg-orc-medium hover:bg-orc-dark">Learn About Our Services</Button>
+              </ul>              
+              <Link href="/services"><Button className="mt-4 bg-orc-medium hover:bg-orc-dark">Learn About Our Services</Button></Link>
             </div>
             <div className="flex items-center justify-center">
               <Image

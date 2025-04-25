@@ -25,7 +25,7 @@ export function CircularMenu({
   const [activeCategory, setActiveCategory] = useState<string | null>(initialCategory || null)
 
   // Default categories if none provided
-  const defaultCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Ethanolamines", "Surfactants"]
+  const defaultCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Surfactants", "Ethanolamines"]
 
   const displayCategories = categories.length > 0 ? categories : defaultCategories
 

@@ -57,7 +57,7 @@ const config = {
           light: "#1e9f5e", // Light green from logo
           medium: "#064321", // Medium green from logo
           dark: "#023316", // Dark green from logo
-          bg: "#c3e6d3", // Very light green for backgrounds
+          bg: "#bce3ce", // Very light green for backgrounds
         },
       },
       borderRadius: {

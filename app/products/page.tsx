@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
@@ -9,7 +10,7 @@ import { ChevronDown, ArrowUp } from "lucide-react"
 import { CategorySelector } from "@/components/category-selector"
 import { RequestQuoteModal } from "@/components/request-quote-modal"
 
-const productCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Ethanolamines", "Surfactants"]
+const productCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Surfactants", "Ethanolamines"]
 
 // Sample product data
 const products = [
@@ -18,7 +19,7 @@ const products = [
     name: "Monoethanolamine (MEA)",
     category: "Ethanolamines",
     description: "High purity monoethanolamine for gas treatment, detergents, and personal care products.",
-    image: "/placeholder.svg?height=300&width=533", // Changed to 16:9 ratio
+    image: "/placeholder.svg?height=300&width=533",
     price: "$45.00 - $1,200.00",
   },
   {
@@ -277,6 +278,9 @@ export default function ProductsPage() {
 
   return (
     <main ref={mainRef} className="flex-1 overflow-x-hidden">
+      <PageHeader title="Products"
+        description="Information about our products."
+      />
       {/* Hero Section with Circle Menu and Category Description */}
       <section className="min-h-screen flex flex-col relative">
         <div className="flex-1 container px-4 md:px-6 py-12 flex flex-col md:flex-row items-center">
@@ -287,7 +291,7 @@ export default function ProductsPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="w-full max-w-[500px]">
+            <div className="w-full max-w-[500px] hover:text-orc-dark">
               <CircularMenu
                 categories={productCategories}
                 onCategorySelect={handleCategorySelect}

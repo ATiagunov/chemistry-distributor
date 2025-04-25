@@ -20,7 +20,7 @@ export function ChatWindow() {
       setIsOpen(true)
       setIsMinimized(false)
     } else {
-      setIsMinimized(!isMinimized)
+      setIsOpen(false)
     }
   }
 
