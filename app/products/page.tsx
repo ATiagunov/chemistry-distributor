@@ -3,12 +3,13 @@
 import { PageHeader } from "@/components/page-header"
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useAnimation, type PanInfo } from "framer-motion"
 import { CircularMenu } from "@/components/circular-menu"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, ArrowUp } from "lucide-react"
+import { ChevronDown, ArrowUp, ChevronLeft, ChevronRight } from "lucide-react"
 import { CategorySelector } from "@/components/category-selector"
 import { RequestQuoteModal } from "@/components/request-quote-modal"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 const productCategories = ["Acids", "Alkalis", "Glycols", "Polymers", "Surfactants", "Ethanolamines"]
 
@@ -182,25 +183,30 @@ export default function ProductsPage() {
   const [showProducts, setShowProducts] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [showScrollTop, setShowScrollTop] = useState(false)
-  const [transitionDirection, setTransitionDirection] = useState<"up" | "down">("down")
+  const [transitionDirection, setTransitionDirection] = useState<"up" | "down" | "left" | "right">("down")
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<string>("")
   const mainRef = useRef<HTMLDivElement>(null)
   const productsRef = useRef<HTMLElement>(null)
+  const descriptionControls = useAnimation()
+
+  // Check if we're on mobile
+  const isMobile = useMediaQuery("(max-width: 768px)")
 
   // Determine the direction of transition based on category change
   const determineTransitionDirection = (prev: string, current: string) => {
     const prevIndex = productCategories.indexOf(prev)
     const currentIndex = productCategories.indexOf(current)
 
-    if (prevIndex === currentIndex) return "down"
-
+    if (prevIndex === currentIndex) return isMobile ? "right" : "down"
     // Handle wrap-around cases
     if (prevIndex === productCategories.length - 1 && currentIndex === 0) {
-      return "down" // Moving clockwise from last to first
-    }
+      return isMobile ? "left" : "down"    }
     if (prevIndex === 0 && currentIndex === productCategories.length - 1) {
-      return "up" // Moving counterclockwise from first to last
+      return isMobile ? "right" : "up"
+    }
+    if (isMobile) {
+      return currentIndex > prevIndex ? "left" : "right"
     }
 
     return currentIndex > prevIndex ? "down" : "up"
@@ -237,6 +243,43 @@ export default function ProductsPage() {
   const handleRequestQuote = (productName: string) => {
     setSelectedProduct(productName)
     setModalOpen(true)
+  }
+
+  const handleSwipe = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (!isMobile) return
+
+    const { offset } = info
+
+    // Determine swipe direction
+    if (Math.abs(offset.x) > 50) {
+      // Threshold for swipe
+      const currentIndex = productCategories.indexOf(selectedCategory)
+      let newIndex
+
+      if (offset.x > 0) {
+        // Swiped right - go to previous category
+        newIndex = currentIndex === 0 ? productCategories.length - 1 : currentIndex - 1
+      } else {
+        // Swiped left - go to next category
+        newIndex = currentIndex === productCategories.length - 1 ? 0 : currentIndex + 1
+      }
+
+      handleCategorySelect(productCategories[newIndex])
+    }
+  }
+
+  // Navigate to next category
+  const handleNextCategory = () => {
+    const currentIndex = productCategories.indexOf(selectedCategory)
+    const nextIndex = currentIndex === productCategories.length - 1 ? 0 : currentIndex + 1
+    handleCategorySelect(productCategories[nextIndex])
+  }
+
+  // Navigate to previous category
+  const handlePrevCategory = () => {
+    const currentIndex = productCategories.indexOf(selectedCategory)
+    const prevIndex = currentIndex === 0 ? productCategories.length - 1 : currentIndex - 1
+    handleCategorySelect(productCategories[prevIndex])
   }
 
   // Filter products based on selected category
@@ -276,17 +319,48 @@ export default function ProductsPage() {
     }
   }, [])
 
+  const swipeVariants = {
+    enter: (direction: "left" | "right") => ({
+      x: direction === "right" ? -300 : 300,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: "left" | "right") => ({
+      x: direction === "right" ? 300 : -300,
+      opacity: 0,
+    }),
+  }
+
+  // Animation variants for desktop
+  const desktopVariants = {
+    enter: (direction: "up" | "down") => ({
+      y: direction === "down" ? -20 : 20,
+      opacity: 0,
+    }),
+    center: {
+      y: 0,
+      opacity: 1,
+    },
+    exit: (direction: "up" | "down") => ({
+      y: direction === "down" ? 20 : -20,
+      opacity: 0,
+    }),
+  }
+
   return (
     <main ref={mainRef} className="flex-1 overflow-x-hidden">
       <PageHeader title="Products"
         description="Information about our products."
       />
       {/* Hero Section with Circle Menu and Category Description */}
-      <section className="min-h-screen flex flex-col relative">
-        <div className="flex-1 container px-4 md:px-6 py-12 flex flex-col md:flex-row items-center">
+      <section className="min-h-[70vh] md:min-h-screen flex flex-col relative">
+        <div className="flex-1 container px-4 md:px-6 py-6 md:py-12 flex flex-col md:flex-row items-center">
           {/* Left side - Circle Menu */}
           <motion.div
-            className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 relative md:pr-8"
+            className="w-full md:w-1/2 hidden md:flex justify-center mb-8 md:mb-0 relative md:pr-8"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -307,21 +381,43 @@ export default function ProductsPage() {
             <div className="h-full w-full bg-gradient-to-b from-transparent via-orc-medium to-transparent"></div>
           </div>
 
-          {/* Right side - Category Description - narrower with better margin */}
+          {isMobile && (
+            <div className="w-full mb-6 flex justify-center">
+              <div className="flex items-center space-x-2">
+                {productCategories.map((category, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full ${
+                      category === selectedCategory ? "bg-orc-medium" : "bg-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Right side */}
           <motion.div
-            className="w-full md:w-1/2 md:pl-8"
+            className="w-full md:w-1/2 md:pl-8 relative"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <AnimatePresence mode="wait">
+
+            <AnimatePresence mode="wait" custom={transitionDirection}>
               <motion.div
                 key={selectedCategory}
-                initial={{ opacity: 0, y: transitionDirection === "down" ? -20 : 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: transitionDirection === "down" ? 20 : -20 }}
+                custom={transitionDirection}
+                variants={isMobile ? swipeVariants : desktopVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 transition={{ duration: 0.3 }}
                 className="bg-orc-bg rounded-3xl p-8 shadow-md border-2 border-orc-medium mx-auto"
+                drag={isMobile ? "x" : false}
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={handleSwipe}
               >
                 <h2 className="text-3xl font-bold mb-4 text-orc-dark">{selectedCategory}</h2>
                 <p className="text-gray-700 text-xl">
@@ -334,7 +430,7 @@ export default function ProductsPage() {
 
         {/* View Products Button */}
         <motion.div
-          className="flex justify-center mb-12"
+          className="flex justify-center mb-12 hidden md:block"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -350,9 +446,9 @@ export default function ProductsPage() {
       </section>
 
       {/* Products Section */}
-      <section ref={productsRef} id="products-section" className="min-h-screen bg-gray-50 pt-8 pb-16">
+      <section ref={productsRef} id="products-section" className="bg-gray-50 pt-2 md:pt-8 pb-16">
         {/* Banner with Category Selector */}
-        <div className="sticky top-16 z-10 bg-white shadow-md">
+        <div className="sticky top-16 z-10 bg-white shadow-md hidden md:block">
           <div className="container px-4 md:px-6 py-4">
             <CategorySelector
               categories={productCategories}
@@ -361,6 +457,12 @@ export default function ProductsPage() {
             />
           </div>
         </div>
+
+        {isMobile && (
+          <div className="container px-4 py-2">
+            <h2 className="text-xl font-bold text-orc-dark text-center">{selectedCategory} Products</h2>
+          </div>
+        )}
 
         {/* Products Grid */}
         <div className="container px-4 md:px-6 mt-8">
