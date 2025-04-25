@@ -176,8 +176,8 @@ const categoryDescriptions = {
 }
 
 export default function ProductsPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("Glycols") // Default to Glycols
-  const [previousCategory, setPreviousCategory] = useState<string>("Glycols")
+  const [selectedCategory, setSelectedCategory] = useState<string>("Acids")
+  const [previousCategory, setPreviousCategory] = useState<string>("Acids")
   const [showProducts, setShowProducts] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [showScrollTop, setShowScrollTop] = useState(false)
@@ -293,7 +293,7 @@ export default function ProductsPage() {
                 onCategorySelect={handleCategorySelect}
                 onCategoryClick={handleCategoryClick}
                 variant="products"
-                initialCategory="Glycols"
+                initialCategory="Ethanolamines"
               />
             </div>
           </motion.div>

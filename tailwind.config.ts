@@ -54,9 +54,9 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         orc: {
-          light: "#10B050", // Light green from logo
-          medium: "#0D8A3F", // Medium green from logo
-          dark: "#065C2A", // Dark green from logo
+          light: "#1e9f5e", // Light green from logo
+          medium: "#064321", // Medium green from logo
+          dark: "#023316", // Dark green from logo
           bg: "#c3e6d3", // Very light green for backgrounds
         },
       },

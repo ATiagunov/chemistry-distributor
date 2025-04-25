@@ -25,7 +25,7 @@ export function CategorySelector({ categories, activeCategory, onSelectCategory 
               className={`w-full h-full transition-transform duration-300 ${
                 activeCategory === category ? "drop-shadow-lg" : ""
               }`}
-              style={{ transform: "rotate(0deg)" }}
+              style={{ transform: "rotate(30deg)" }}
             >
               <g className="hovered" transform="translate(100, 100)">
                 <defs>

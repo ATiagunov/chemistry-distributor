@@ -104,13 +104,6 @@ export function CircularMenu({
     if (onCategoryClick) {
       onCategoryClick(category)
     }
-
-    // Rotate the flower to the clicked category position
-    const flower = flowerRef.current
-    if (flower) {
-      const angle = index * 60
-      flower.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`
-    }
   }
 
   let menuClass = "circle-menu"
