@@ -430,14 +430,14 @@ export default function ProductsPage() {
 
         {/* View Products Button */}
         <motion.div
-          className="flex justify-center mb-12 hidden md:block"
+          className="flex justify-center mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <Button
             onClick={handleViewProducts}
-            className="group flex flex-col items-center bg-transparent hover:bg-transparent text-orc-medium hover:text-orc-dark"
+            className="hidden md:flex flex-col items-center bg-transparent hover:bg-transparent text-orc-medium hover:text-orc-dark"
           >
             <span className="mb-2 text-lg font-medium">View Products</span>
             <ChevronDown className="h-12 w-12 animate-bounce" />
