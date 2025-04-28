@@ -353,7 +353,7 @@ export default function ProductsPage() {
   return (
     <main ref={mainRef} className="flex-1 overflow-x-hidden">
       <PageHeader title="Products"
-        description="Information about our products."
+        description="Information about our product line. Select category to learn more."
       />
       {/* Hero Section with Circle Menu and Category Description */}
       <section className="min-h-[70vh] md:min-h-screen flex flex-col relative">

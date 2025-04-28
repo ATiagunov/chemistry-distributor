@@ -36,10 +36,18 @@ export function SiteHeader() {
               </li>
               <li className="flex items-center h-full">
                 <Link
-                  href="/payment-delivery"
+                  href="/videos"
                   className="flex items-center h-full text-sm font-medium transition-colors hover:text-orc-medium"
                 >
-                  Payment and Delivery
+                  Videos
+                </Link>
+              </li>
+              <li className="flex items-center h-full">
+                <Link
+                  href="/reviews"
+                  className="flex items-center h-full text-sm font-medium transition-colors hover:text-orc-medium"
+                >
+                  Reviews
                 </Link>
               </li>
               <li className="flex items-center h-full">

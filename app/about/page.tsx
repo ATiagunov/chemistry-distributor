@@ -1,215 +1,176 @@
-import Image from "next/image"
+"use client"
+
+import { useEffect, useState } from "react"
 import { PageHeader } from "@/components/page-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Users, Award, Globe, Leaf } from "lucide-react"
-
-// Sample team members data
-const teamMembers = [
-  {
-    id: 1,
-    name: "Dr. Alexander Mitchell",
-    position: "Chief Executive Officer",
-    bio: "With over 25 years of experience in the chemical industry, Dr. Mitchell leads our company with a focus on innovation and sustainability.",
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 2,
-    name: "Dr. Sarah Johnson",
-    position: "Chief Scientific Officer",
-    bio: "Dr. Johnson oversees our R&D department, bringing her expertise in organic chemistry and material science to develop cutting-edge solutions.",
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 3,
-    name: "Michael Zhang",
-    position: "Operations Director",
-    bio: "Michael ensures the efficiency and safety of our production facilities while maintaining the highest quality standards for all our products.",
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 4,
-    name: "Emily Rodriguez",
-    position: "Sales & Marketing Director",
-    bio: "Emily leads our global sales team, developing strategic partnerships and ensuring our products meet the evolving needs of our customers.",
-    image: "/placeholder.svg?height=300&width=300",
-  },
-]
-
-// Company milestones
-const milestones = [
-  {
-    year: "1995",
-    title: "Company Founded",
-    description: "ORC Chemicals was established with a focus on providing high-quality laboratory chemicals.",
-  },
-  {
-    year: "2002",
-    title: "Expansion into Industrial Chemicals",
-    description: "Expanded product range to include industrial-grade chemicals for manufacturing applications.",
-  },
-  {
-    year: "2008",
-    title: "ISO Certification",
-    description: "Achieved ISO 9001 certification, demonstrating our commitment to quality management.",
-  },
-  {
-    year: "2012",
-    title: "New Production Facility",
-    description: "Opened state-of-the-art production facility to increase capacity and enhance quality control.",
-  },
-  {
-    year: "2015",
-    title: "International Expansion",
-    description: "Established distribution networks in Europe and Asia to serve global customers.",
-  },
-  {
-    year: "2020",
-    title: "Sustainability Initiative",
-    description: "Launched comprehensive sustainability program to reduce environmental impact of operations.",
-  },
-]
+import { Award, Globe, Leaf, Users } from "lucide-react"
+import { motion } from "framer-motion"
 
 export default function AboutPage() {
+  const [showText, setShowText] = useState(false)
+
+  useEffect(() => {
+    // Delay showing the ORC text
+    const timer = setTimeout(() => {
+      setShowText(true)
+    }, 800)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <main className="flex-1">
+    <main className="flex-1 relative overflow-hidden">
       <PageHeader
         title="About ORC Chemicals"
         description="Your trusted partner for high-quality chemical products since 1995."
       />
 
-      <section className="py-12 md:py-16">
+      {/* Main content with flower on the right */}
+      <section className="py-6 md:py-10 relative z-10">
+        <div className="container px-2 md:px-4">
+          <div className="flex flex-col md:flex-row items-center md:items-start">
+            {/* Left side - Text content */}
+            <div className="w-full md:w-2/3 md:pr-2">
+              <div className="max-w-xl">
+                <h2 className="text-3xl font-bold mb-6">Who We Are</h2>
+                <p className="text-muted-foreground mb-6">
+                  At ORC Chemicals, we are a leading supplier of high-quality chemical products and solutions that
+                  enable our customers to innovate and succeed in their respective industries. Founded in 1995, we have
+                  grown from a small laboratory chemicals provider to a comprehensive chemical solutions company serving
+                  clients worldwide.
+                </p>
+                <p className="text-muted-foreground">
+                  Our team consists of experienced chemists, engineers, and industry specialists who are passionate
+                  about chemistry and committed to delivering excellence. We combine scientific expertise with
+                  customer-focused service to provide solutions that meet the evolving needs of our diverse client base.
+                </p>
+              </div>
+            </div>
+
+            {/* Right side - Flower SVG */}
+            <div className="w-full md:w-1/3 flex justify-center mt-2 md:mt-0 relative">
+              <div className="w-[400px] h-[400px] relative">
+                <svg className="w-full h-full" viewBox="-100 -100 400 400" xmlns="http://www.w3.org/2000/svg">
+                  <g transform="translate(100, 100)">
+                    <defs>
+                      <path id="petal" d="M 20 50 Q 100 0, 160 50 Q 100 100, 20 50 Z" />
+                    </defs>
+
+                    {/* Outer petals - Green */}
+                    <g fill="rgba(30,159,94,0.8)">
+                      <use href="#petal" transform="rotate(0) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(22.5) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(45) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(67.5) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(90) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(112.5) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(135) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(157.5) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(180) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(202.5) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(225) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(247.5) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(270) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(292.5) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(315) translate(0,-50)" />
+                      <use href="#petal" transform="rotate(337.5) translate(0,-50)" />
+                    </g>
+
+                    {/* Inner petals - Dark Green */}
+                    <g fill="rgba(13, 97, 55, 0.8)">
+                      <use href="#petal" transform="rotate(11.25) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(33.75) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(56.25) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(78.75) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(101.25) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(123.75) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(146.25) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(168.75) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(191.25) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(213.75) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(236.25) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(258.75) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(281.25) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(303.75) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(326.25) scale(0.85) translate(-20,-50)" />
+                      <use href="#petal" transform="rotate(348.75) scale(0.85) translate(-20,-50)" />
+                    </g>
+                  </g>
+                </svg>
+
+                {/* Animated ORC text */}
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: showText ? 1 : 0 }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <span className="text-white font-bold text-6xl">ORC</span>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Values Section */}
+      <section className="py-12 md:py-16 relative z-10">
         <div className="container px-4 md:px-6">
-          <Tabs defaultValue="company" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="company">Our Company</TabsTrigger>
-              <TabsTrigger value="history">History & Milestones</TabsTrigger>
-              <TabsTrigger value="team">Leadership Team</TabsTrigger>
-            </TabsList>
+          <h2 className="text-3xl font-bold mb-8 text-center">Our Values</h2>
 
-            <TabsContent value="company" className="mt-6">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                  <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
-                  <p className="text-muted-foreground mb-6">
-                    At ORC Chemicals, our mission is to provide high-quality chemical products and solutions that enable
-                    our customers to innovate and succeed in their respective industries. We are committed to
-                    operational excellence, environmental responsibility, and continuous improvement in everything we
-                    do.
-                  </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="bg-white/90 backdrop-blur-sm">
+              <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                <Award className="h-6 w-6 text-orc-medium" />
+                <CardTitle className="text-lg">Quality</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  We maintain the highest standards in our products and services, ensuring consistency, purity, and
+                  reliability in everything we deliver.
+                </p>
+              </CardContent>
+            </Card>
 
-                  <h2 className="text-2xl font-bold mb-4">Our Values</h2>
-                  <div className="grid grid-cols-2 gap-4">
-                    <Card>
-                      <CardHeader className="flex flex-row items-center gap-2 pb-2">
-                        <Award className="h-5 w-5 text-orc-medium" />
-                        <CardTitle className="text-lg">Quality</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          We maintain the highest standards in our products and services.
-                        </p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="flex flex-row items-center gap-2 pb-2">
-                        <Leaf className="h-5 w-5 text-orc-medium" />
-                        <CardTitle className="text-lg">Sustainability</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          We are committed to environmentally responsible operations.
-                        </p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="flex flex-row items-center gap-2 pb-2">
-                        <Globe className="h-5 w-5 text-orc-medium" />
-                        <CardTitle className="text-lg">Innovation</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          We continuously improve our products and processes.
-                        </p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="flex flex-row items-center gap-2 pb-2">
-                        <Users className="h-5 w-5 text-orc-medium" />
-                        <CardTitle className="text-lg">Partnership</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                          We build long-term relationships with our customers and suppliers.
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-                <div className="flex justify-center">
-                  <Image
-                    src="/placeholder.svg?height=400&width=400"
-                    width={400}
-                    height={400}
-                    alt="ORC Chemicals facility"
-                    className="rounded-lg"
-                  />
-                </div>
-              </div>
-            </TabsContent>
+            <Card className="bg-white/90 backdrop-blur-sm">
+              <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                <Leaf className="h-6 w-6 text-orc-medium" />
+                <CardTitle className="text-lg">Sustainability</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  We are committed to environmentally responsible operations, continuously seeking ways to reduce our
+                  ecological footprint and promote sustainable chemistry.
+                </p>
+              </CardContent>
+            </Card>
 
-            <TabsContent value="history" className="mt-6">
-              <div className="space-y-8">
-                <div className="flex justify-center mb-8">
-                  <Image
-                    src="/placeholder.svg?height=300&width=800"
-                    width={800}
-                    height={300}
-                    alt="Company timeline"
-                    className="rounded-lg"
-                  />
-                </div>
+            <Card className="bg-white/90 backdrop-blur-sm">
+              <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                <Globe className="h-6 w-6 text-orc-medium" />
+                <CardTitle className="text-lg">Innovation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  We continuously improve our products and processes, embracing new technologies and approaches to
+                  better serve our customers and advance the field of chemistry.
+                </p>
+              </CardContent>
+            </Card>
 
-                <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-center mb-6">Our Journey</h2>
-                  <div className="relative border-l-2 border-orc-medium pl-8 ml-4 space-y-10">
-                    {milestones.map((milestone, index) => (
-                      <div key={index} className="relative">
-                        <div className="absolute -left-10 top-1 w-6 h-6 rounded-full bg-orc-medium flex items-center justify-center">
-                          <div className="w-3 h-3 rounded-full bg-white"></div>
-                        </div>
-                        <div className="bg-white p-4 rounded-lg shadow-sm">
-                          <h3 className="text-xl font-bold text-orc-dark">{milestone.year}</h3>
-                          <h4 className="text-lg font-medium mb-2">{milestone.title}</h4>
-                          <p className="text-muted-foreground">{milestone.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="team" className="mt-6">
-              <h2 className="text-2xl font-bold text-center mb-8">Our Leadership Team</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {teamMembers.map((member) => (
-                  <Card key={member.id} className="overflow-hidden">
-                    <div className="relative h-64 w-full">
-                      <Image src={member.image || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
-                    </div>
-                    <CardHeader>
-                      <CardTitle>{member.name}</CardTitle>
-                      <p className="text-sm text-orc-medium font-medium">{member.position}</p>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">{member.bio}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+            <Card className="bg-white/90 backdrop-blur-sm">
+              <CardHeader className="flex flex-row items-center gap-2 pb-2">
+                <Users className="h-6 w-6 text-orc-medium" />
+                <CardTitle className="text-lg">Partnership</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  We build long-term relationships with our customers and suppliers based on trust, transparency, and
+                  mutual benefit, working together to achieve shared success.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
     </main>
