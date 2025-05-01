@@ -364,7 +364,7 @@ export default function ProductsPage() {
       </motion.div>
 
       {/* Hero Section with Circle Menu and Category Description */}
-      <section className="min-h-[70vh] md:min-h-screen flex flex-col relative">
+      <section className="min-h-[70vh] flex flex-col relative">
         <div className="flex-1 container px-4 md:px-6 py-6 md:py-12 flex flex-col md:flex-row items-center">
           {/* Left side - Circle Menu */}
           <motion.div
