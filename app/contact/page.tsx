@@ -35,10 +35,17 @@ export default function ContactPage() {
 
   return (
     <main className="flex-1">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
       <PageHeader
         title="Our Global Presence"
         description="ORC Chemicals operates internationally with key facilities in strategic locations."
       />
+      </motion.div>
+
 
       <section className="py-12 md:py-16">
         <div className="container px-4 md:px-6">

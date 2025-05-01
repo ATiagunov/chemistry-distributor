@@ -1,5 +1,6 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import { PageHeader } from "@/components/page-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,10 +12,16 @@ export default function AboutPage() {
 
   return (
     <main className="flex-1 relative overflow-hidden">
-      <PageHeader
-        title="About ORC Chemicals"
-        description="Your trusted partner for high-quality chemical products since 1995."
-      />
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
+        <PageHeader
+          title="About ORC Chemicals"
+          description="Your trusted partner for high-quality chemical products since 1995."
+        />
+      </motion.div>
 
       <section className="py-6 md:py-10 relative z-10">
         <div className="container px-2 md:px-4">

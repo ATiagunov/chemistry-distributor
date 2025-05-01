@@ -1,8 +1,11 @@
+"use client"
+
 import Image from "next/image"
 import { PageHeader } from "@/components/page-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BadgeCheck } from "lucide-react"
+import { motion } from "framer-motion"
 
 // Sample services data
 const services = [
@@ -47,10 +50,17 @@ const services = [
 export default function ServicesPage() {
   return (
     <main className="flex-1">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
       <PageHeader
         title="Our Services"
         description="We provide comprehensive solutions to support your operations, from technical consultation to logistics management."
       />
+      </motion.div>
+
 
       <section className="py-12 md:py-16">
         <div className="container px-4 md:px-6">

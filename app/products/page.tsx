@@ -352,9 +352,17 @@ export default function ProductsPage() {
 
   return (
     <main ref={mainRef} className="flex-1 overflow-x-hidden">
-      <PageHeader title="Products"
-        description="Information about our product line. Select category to learn more."
-      />
+      <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+
+      >
+          <PageHeader title="Products"
+            description="Information about our product line. Select category to learn more."
+          />
+      </motion.div>
+
       {/* Hero Section with Circle Menu and Category Description */}
       <section className="min-h-[70vh] md:min-h-screen flex flex-col relative">
         <div className="flex-1 container px-4 md:px-6 py-6 md:py-12 flex flex-col md:flex-row items-center">
@@ -363,7 +371,7 @@ export default function ProductsPage() {
             className="w-full md:w-1/2 hidden md:flex justify-center mb-8 md:mb-0 relative md:pr-8"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
           >
             <div className="w-full max-w-[500px] hover:text-orc-dark">
               <CircularMenu
@@ -401,7 +409,7 @@ export default function ProductsPage() {
             className="w-full md:w-1/2 md:pl-8 relative"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.8 }}
           >
 
             <AnimatePresence mode="wait" custom={transitionDirection}>
@@ -476,9 +484,9 @@ export default function ProductsPage() {
               {filteredProducts.map((product) => (
                 <motion.div
                   key={product.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
                   className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300 product-card"
                 >

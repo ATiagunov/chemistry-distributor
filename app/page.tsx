@@ -1,5 +1,8 @@
 "use client"
 
+import type React from "react"
+
+import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -16,7 +19,12 @@ export default function Home() {
       {/* Combined Hero Section with Circular Menu */}
       <section className="w-full py-12 md:py-12 lg:py-24 bg-gradient-to-b from-white to-orc-bg">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center text-center mb-12">
+          <motion.div
+            className="flex flex-col items-center text-center mb-12"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+          >
             <div className="space-y-4 max-w-[800px]">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                 Premium Chemistry Products for Industry & Research
@@ -26,11 +34,16 @@ export default function Home() {
                 expert support and reliable delivery.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           <div className="grid gap-12 lg:grid-cols-2 items-center">
             {/* Circular Menu - Left side on desktop, top on mobile */}
-            <div className="flex justify-center order-2 lg:order-1">
+            <motion.div
+              className="flex justify-center order-2 lg:order-1"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+            >
               <div className="w-full max-w-[500px] hover:text-orc-dark">
                 <CircularMenu
                   categories={productCategories}
@@ -41,10 +54,15 @@ export default function Home() {
                   }}
                 />
               </div>
-            </div>
+            </motion.div>
 
             {/* Content - Right side on desktop, bottom on mobile */}
-            <div className="flex flex-col space-y-6 order-1 lg:order-2">
+            <motion.div
+              className="flex flex-col space-y-6 order-1 lg:order-2"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+            >
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold tracking-tighter md:text-3xl">Comprehensive Chemical Solutions</h2>
                 <p className="text-muted-foreground">
@@ -60,7 +78,7 @@ export default function Home() {
                   </Button>
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>

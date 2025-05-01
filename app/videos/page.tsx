@@ -1,9 +1,11 @@
+"use client"
+
 import { PageHeader } from "@/components/page-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Play, Clock, Calendar } from "lucide-react"
 import Image from "next/image"
-
+import { motion } from "framer-motion"
 // Sample video data
 const videos = [
   {
@@ -86,10 +88,17 @@ export default function VideosPage() {
 
   return (
     <main className="flex-1">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
       <PageHeader
         title="Video Library"
         description="Explore our collection of educational videos, product demonstrations, and technical guides."
       />
+      </motion.div>
+
 
       <section className="py-12 md:py-16">
         <div className="container px-4 md:px-6">

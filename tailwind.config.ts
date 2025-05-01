@@ -54,8 +54,10 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         orc: {
-          light: "#1e9f5e", // Light green from logo
-          medium: "#064321", // Medium green from logo
+    //       rgb(30,159,94)"] use')
+    // const innerPetals = svg.querySelectorAll('g[fill="rgb(2, 51, 22)
+          light: "#4aed9b", // Light green from logo
+          medium: "#1e9f5e", // Medium green from logo
           dark: "#023316", // Dark green from logo
           bg: "#bce3ce", // Very light green for backgrounds
         },

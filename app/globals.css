@@ -116,7 +116,6 @@
   border-radius: 50%;
   background-color: #f0f8f4; /* Even lighter background for products page */
   overflow: hidden;
-  border: 2px solid #0d8a3f; /* Green border */
   transition: transform 0.3s ease;
   box-shadow: 0 4px 12px rgba(6, 92, 42, 0.2); /* Darker shadow */
 }
@@ -127,7 +126,6 @@
 
 .circle-menu-products .flower {
   background-color: #f8fcfa; /* Different center color */
-  border: 2px solid #0d8a3f;
 }
 
 .flower {

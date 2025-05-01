@@ -1,9 +1,11 @@
+"use client"
+
 import Image from "next/image"
 import { PageHeader } from "@/components/page-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { BadgeCheck, Download, FileText } from "lucide-react"
-
+import { motion } from "framer-motion"
 // Sample certificates data
 const certificates = [
   {
@@ -43,10 +45,17 @@ const certificates = [
 export default function CertificatesPage() {
   return (
     <main className="flex-1">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
       <PageHeader
         title="Certificates & Compliance"
         description="Our commitment to quality, safety, and environmental responsibility is backed by internationally recognized certifications."
       />
+      </motion.div>
+
 
       <section className="py-12 md:py-16">
         <div className="container px-4 md:px-6">

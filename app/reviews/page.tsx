@@ -1,8 +1,11 @@
+"use client"
+
 import { PageHeader } from "@/components/page-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, Quote, Building } from "lucide-react"
 import Image from "next/image"
+import { motion } from "framer-motion"
 
 // Sample review data
 const reviews = [
@@ -87,21 +90,20 @@ const reviews = [
 ]
 
 export default function ReviewsPage() {
-  // Calculate average rating
-  const averageRating = reviews.reduce((total, review) => total + review.rating, 0) / reviews.length
-
-  // Count reviews by rating
-  const ratingCounts = [5, 4, 3, 2, 1].map((rating) => reviews.filter((review) => review.rating === rating).length)
-
-  // Calculate rating percentages
-  const ratingPercentages = ratingCounts.map((count) => (count / reviews.length) * 100)
 
   return (
     <main className="flex-1">
-      <PageHeader
-        title="Customer Reviews"
-        description="See what our customers are saying about our products and services."
-      />
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
+        <PageHeader
+          title="Customer Reviews"
+          description="See what our customers are saying about our products and services."
+        />
+      </motion.div>
+
 
       {/* Reviews Grid */}
       <section className="py-12 md:py-16">
